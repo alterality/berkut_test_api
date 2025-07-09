@@ -1,0 +1,112 @@
+spring:
+  application:
+    name: telegram-bot-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/telegram_api
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: ADMIN
+
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=1h
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:VGhpcyBpcyBhIHRlc3Qgc2VjcmV0IGtleSB3aXRob3V0IGRlZmlzcyAtIE5PVCB1c2UgdGhpcyBpbiBwcm9kdWN0aW9uIQ==}
+    access-token-expiration: 3600000
+    refresh-token-expiration: 86400000
+    token-prefix: "Bearer "
+    header-name: "Authorization"
+
+
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN}
+    username: ${TELEGRAM_BOT_USERNAME}
+
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,beans,conditions,configprops,env,mappings,scheduledtasks,threaddump
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+
+logging:
+  level:
+    root: INFO
+    berkut.abc: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.telegram: INFO
+    io.jsonwebtoken: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/telegram-bot-api-dev.log
+
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  show-actuator: true
