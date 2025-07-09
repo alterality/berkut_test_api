@@ -11,7 +11,7 @@ import java.util.List;
 @Value
 @Builder
 @Jacksonized
-public class ApiResponse<T> {
+public class ApiResponseDto<T> {
 
     @JsonProperty("success")
     Boolean success;
@@ -29,30 +29,30 @@ public class ApiResponse<T> {
     @JsonProperty("errors")
     List<String> errors;
 
-    public static <T> ApiResponse<T> success(T data) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiResponseDto<T> success(T data) {
+        return ApiResponseDto.<T>builder()
                 .success(true)
                 .data(data)
                 .build();
     }
 
-    public static <T> ApiResponse<T> success(T data, String message) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiResponseDto<T> success(T data, String message) {
+        return ApiResponseDto.<T>builder()
                 .success(true)
                 .data(data)
                 .message(message)
                 .build();
     }
 
-    public static <T> ApiResponse<T> error(String message) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiResponseDto<T> error(String message) {
+        return ApiResponseDto.<T>builder()
                 .success(false)
                 .message(message)
                 .build();
     }
 
-    public static <T> ApiResponse<T> error(List<String> errors) {
-        return ApiResponse.<T>builder()
+    public static <T> ApiResponseDto<T> error(List<String> errors) {
+        return ApiResponseDto.<T>builder()
                 .success(false)
                 .errors(errors)
                 .build();

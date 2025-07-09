@@ -71,6 +71,7 @@ dependencies {
 
     // API Documentation
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.2.0")
 
     // Caching
     implementation("com.github.ben-manes.caffeine:caffeine")
